@@ -18,7 +18,7 @@ You're tasked with writing a spec for a generic local cache with the following p
 5. The cache described in the task is a write through cache, where the cache is writing to the data source. In this task through the use of a delegate function or through the use of a callback interface to actually write the data to the data store. 
 6. While a local write through cache solves the stale data potential of a single machine it does not account for multiple machines working with their own local cache. If we need consistency between machines we will still need to have a mechanism in place to communicate changes in sum kind of pub/sub mechanism. 
 7. In terms of QPS (queries per seconds)/latency we might see the most bang for the bucks if we ensure that we are caching frequently used data. Because we are running locally we have minimum latency in terms of returning cached data but the limited amount of local memory might cause more frequent calls to uncached data which will in term produce a higher latency. 
-8. Mutual exclusive locks should be acquired on a specific key bases to allow other key usages to continue while updating a given key. 
+8. Mutual exclusive lock should be acquired on the internal map to allow other key usages to continue while updating a given key. 
 
 ## Implementation Overview (in-process cache):
 
@@ -29,8 +29,8 @@ You're tasked with writing a spec for a generic local cache with the following p
         * ctor(cacheStoreProvider, cacheConfig)
             * cacheStoreProvider - an instance of a class implementing or extending CacheStoreProvider.
             * cacheConfig - an instance of class CacheConfig defining the behavior of the cache.
-        * get(key) - a method that given a key returns the value based on cached value or if it is not available using the CacheStoreProvider. If value is not cached we should lock based on a specific key in order to make sure that we only fetch the value from the store once.
-        * set(key, value) - a method that given a key and value will update the cache after storing the value in the backend storage using the CacheStoreProvider. While updating we should acquire a lock for the key to ensure that cached data and data in the store are in sync.
+        * get(key) - a method that given a key returns the value based on cached value or if it is not available using the CacheStoreProvider. If value is not cached we should lock on the internal map in order to make sure that we only fetch the value from the store once.
+        * set(key, value) - a method that given a key and value will update the cache after storing the value in the backend storage using the CacheStoreProvider. While updating we should acquire a lock on the internal map to ensure that cached data and data in the store are in sync.
     * Cache class implementation:
         * The cache class should hold a single member such as the LRUMap which will be a map that tracks it's entries by order, frequency, expiration and provided a call to a cleanup method will evict the relevant members. The member type will be based on the configuration provided in the construction of the Cache class.
         * On creation of the cache class a low priority thread will be invoked that will periodically call the cleanup method of the Map implementing member. This will evict members based on the configuration provided when the Cache class was created.
