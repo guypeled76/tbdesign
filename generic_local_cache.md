@@ -22,7 +22,19 @@ You're tasked with writing a spec for a generic local cache with the following p
 
 ## Implementation Overview (in-process cache):
 
-1. 
+1. CacheStoreProvider - an interface or an abstract class that will be required to implement and provide and instance which will get and set values to the backend store.
+2. CacheConfig - a class with definitions for cache behavior such as the eviction policy.
+3. Cache - a class that will be the entry point for caching interaction.
+    * Cache class API:
+        * ctor(cacheStoreProvider, cacheConfig)
+            * cacheStoreProvider - an instance of a class implementing or extending CacheStoreProvider.
+            * cacheConfig - an instance of class CacheConfig defining the behavior of the cache.
+        * get(key) - a method that given a key returns the value based on cached value or if it is not available using the CacheStoreProvider. If value is not cached we should lock based on a specific key in order to make sure that we only fetch the value from the store once.
+        * set(key, value) - a method that given a key and value will update the cache after storing the value in the backend storage using the CacheStoreProvider. While updating we should acquire a lock for the key to ensure that cached data and data in the store are in sync.
+    * Cache class implementation:
+        * The cache class should hold a single member such as the LRUMap which will be a map that tracks it's entries by order, frequency, expiration and provided a call to a cleanup method will evict the relevant members. The member type will be based on the configuration provided in the construction of the Cache class.
+
+
 
 ## Implementation References (java):
 1. [LRUMap](https://commons.apache.org/proper/commons-collections/apidocs/org/apache/commons/collections4/map/LRUMap.html) - 
