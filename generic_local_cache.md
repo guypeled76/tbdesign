@@ -33,6 +33,9 @@ You're tasked with writing a spec for a generic local cache with the following p
         * set(key, value) - a method that given a key and value will update the cache after storing the value in the backend storage using the CacheStoreProvider. While updating we should acquire a lock for the key to ensure that cached data and data in the store are in sync.
     * Cache class implementation:
         * The cache class should hold a single member such as the LRUMap which will be a map that tracks it's entries by order, frequency, expiration and provided a call to a cleanup method will evict the relevant members. The member type will be based on the configuration provided in the construction of the Cache class.
+        * On creation of the cache class a low priority thread will be invoked that will periodically call the cleanup method of the Map implementing member. This will evict members based on the configuration provided when the Cache class was created.
+        * The class should have a close method that terminates the background thread.
+
 
 
 
