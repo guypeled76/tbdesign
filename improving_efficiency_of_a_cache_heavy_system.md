@@ -1,4 +1,4 @@
-# Improving the efficiency of a cache heavy system
+# Improving efficiency of a cache heavy system
 
 ## Task:
 You are tasked with improving the efficiency of a cache heavy system, which has the following
