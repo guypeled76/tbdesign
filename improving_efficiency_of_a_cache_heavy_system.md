@@ -25,7 +25,7 @@ was stored in Cassandra and not a classic database?
 
 ## Solution
 
-With the current cache architecture, cache items do not update when the data on the database updates.  That is way we have stale data and we are relaying on TTL to update the cache items and those having redundant queries to the data base.
+With the current cache architecture, cache items do not update when the data on the database updates.  That is why we have stale data and we are relaying on TTL to update the cache items and those having redundant queries to the data base.
 
 This is really a pooling architecture which the cache layer is the client and the database as the server. If we lower the TTL time we will have less time for stale data but more redundant queries to database. If we increase the TTL we will have less redundant queries to the database but more time of stale data.
 
