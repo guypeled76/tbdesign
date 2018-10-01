@@ -25,7 +25,11 @@ was stored in Cassandra and not a classic database?
 
 ## Solution
 
-With current cache architecture cache items do not update when the data on the database updates.  We need to have database triggers that will publish into a pub/sub system that we can send messages of data updating. 
+With the current cache architecture, cache items do not update when the data on the database updates.  That is way we have stale data and we are relaying on TTL to update the cache items and those having redundant queries to the data base.
+
+This is really a pooling architecture which the cache layer is the client and the database as the server. If we lower the TTL time we will have less time for stale data but more redundant queries to database. If we increase the TTL we will have less redundant queries to the database but more time of stale data.
+
+We need to introduce a pub/sub system in to the architecture to allow publishing of data changes to the cache layer instances. In the relational database architecture this is usually done by using triggers that publish change messages to the pub/sub system. This approach also works across data centers cause we can have triggers in the replication of databases which will notify the other data center cache layer the same way it had been done in the data center that was updated.
 
 The messages sent to the pub/sub system should be rather simple as ideally it would contain a key or list of keys that should be invalidated. The subscribers of the pub/sub system will be the different cache layer instances which will now get notified when they need to delete stale data.
 
@@ -36,3 +40,6 @@ The pub/sub approach for invalidating the stale data will solve the redundant da
 The real complexity with the new architecture of using a pub/sub system as a way to invalidate stale data in the cache layer is identifying which cache keys should we update. Introducing casandra as the backend data store allows us to cache the entries based on the casandra model which could be described as a key value storage which the key is a combination of table name table primary key and value as the actual record. 
 
 The previous paragraph is obviously a simplification of caching needs cause we might need to store a list of internal record list stored in casandra such as users friends list but we can still use the table name and primary key to generate a predictable key. That way if we update the friends list with in a user record we could publish a change message to the pub/sub system that states a a specific change with a key like this '[table]_[primarykey]_friends'. 
+
+## Related Resources:
+1. [Facebook-Memcached](https://www.youtube.com/watch?v=UH7wkvcf0ys) - Mark Zuckerberg talks about how the company uses memcached for caching and storage performance. Facebook uses MySql databases and memcache and invalidates cache using triggers and a pub/sub approach.
