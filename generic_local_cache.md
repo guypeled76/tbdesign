@@ -37,7 +37,7 @@ You're tasked with writing a spec for a generic local cache with the following p
         * On creation of the cache class a low priority thread will be invoked that will periodically call the cleanup method of the Map implementing member. This will evict members based on the configuration provided when the _Cache_ class was created.
         * The class should have a close method that terminates the background thread.
     * _CacheMap_ class implementation:
-        * The _CacheMap_ class should be a member in the *Cache* class which implements a 
+        * The `CacheMap` class should be a member in the *Cache* class which implements a 
         single method called _cleanup_ 
         ```
         * java.lang.Object
