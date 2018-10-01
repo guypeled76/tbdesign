@@ -45,5 +45,5 @@ Another way that cassandra could help is caching at the database level using cas
 
 ## Related Resources:
 
-1. [Facebook-Memcached](https://www.youtube.com/watch?v=UH7wkvcf0ys) - Mark Zuckerberg talks about how the company uses memcached for caching and storage performance. Facebook uses MySql databases and memcache and invalidates cache using triggers and a pub/sub approach.
+1. [Facebook-Memcached](https://www.youtube.com/watch?v=UH7wkvcf0ys) - Mark Zuckerberg talks about how the company uses memcached for caching and storage performance. Facebook uses MySql databases and memcached and invalidates cache using triggers and a pub/sub approach.
 2. [Cassandra Cache](https://www.datastax.com/dev/blog/maximizing-cache-benefit-with-cassandra) - Cassandra’s built-in key and row caches can provide very efficient data caching. 

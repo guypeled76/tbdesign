@@ -18,8 +18,9 @@ You're tasked with writing a spec for a generic local cache with the following p
 5. The cache described in the task sounds like a read cache which reads from a data store that is not managed by the cache. This implies that we could end up with stale data on the cache layer. This means that we will need some kind of pub/sub mechanism to notify the cache on data store data changes or to allow for an update period using expiration time for a simpler but less consistent system. The later might also hinder the cache performance as we will be evicting members that might not have changed. 
 6. In terms of QPS (queries per seconds)/latency we might see the most bang for the bucks if we ensure that we are caching frequently used data. Because we are running locally we have minimum latency in terms of returning cached data but the limited amount of local memory might cause more frequent calls to uncached data which will in term produce a higher latency. 
 7. Mutual exclusive lock should be acquired on the internal map updating to synchronize concurrent cache usage. When evicting members or when filling in missing cache items we will need to lock the internal map. 
+8. The data types that we can cache depends on the cache process model. If we are looking to provide an in process caching mechanism then all types could be cached. If we are looking to provide a local cache that can be accessed from different processes then we will have to only accept serializable data types.
 
-## Implementation Overview:
+## Implementation Overview (in-proc):
 
 1. CacheStoreProvider - an interface or an abstract class that will be required to implement and provide and instance which will get and set values to the backend store.
 2. CacheConfig - a class with definitions for cache behavior such as the eviction policy.
