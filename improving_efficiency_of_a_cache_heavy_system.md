@@ -37,7 +37,7 @@ LRU eviction policy will still be used to manage the memory consumption but now 
 
 The pub/sub approach for invalidating the stale data will solve the redundant database queries we had in the previous architecture as we now have a way to actually know if data has changed and don't need to pull data again to see if there was a change.
 
-The real complexity with the new architecture of using a pub/sub system as a way to invalidate stale data in the cache layer is identifying which cache keys should we update. Introducing casandra as the backend data store allows us to cache the entries based on the casandra model which could be described as a key value storage which the key is a combination of table name and primary key as the key and value as the actual record. 
+The real complexity with the new architecture of using a pub/sub system as a way to invalidate stale data in the cache layer is identifying which cache keys should we update. Introducing casandra as the backend data store allows us to cache the entries based on the casandra model which could be described as a key value storage which the key is a combination of _table name_ and _primary key_ and the value is the actual record. 
 
 The previous paragraph is obviously a simplification of caching needs cause we might need to store a list of internal record list stored in casandra such as users friends list but we can still use the table name and primary key to generate a predictable key. That way if we update the friends list with in a user record we could publish a change message to the pub/sub system that states a a specific change with a key like this '[table]_[primarykey]_friends'. 
 
