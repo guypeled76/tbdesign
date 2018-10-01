@@ -41,5 +41,9 @@ The real complexity with the new architecture of using a pub/sub system as a way
 
 The previous paragraph is obviously a simplification of caching needs cause we might need to store a list of internal record list stored in casandra such as users friends list but we can still use the table name and primary key to generate a predictable key. That way if we update the friends list with in a user record we could publish a change message to the pub/sub system that states a a specific change with a key like this '[table]_[primarykey]_friends'. 
 
+Another way that cassandra could help is caching at the database level using casandra's builtin row/key cache capabilities. This is obviously a less specific approach and might not really provide for all needs but in simple cases might do the job.
+
 ## Related Resources:
+
 1. [Facebook-Memcached](https://www.youtube.com/watch?v=UH7wkvcf0ys) - Mark Zuckerberg talks about how the company uses memcached for caching and storage performance. Facebook uses MySql databases and memcache and invalidates cache using triggers and a pub/sub approach.
+2. [Cassandra Cache](https://www.datastax.com/dev/blog/maximizing-cache-benefit-with-cassandra) - Cassandra’s built-in key and row caches can provide very efficient data caching. 
