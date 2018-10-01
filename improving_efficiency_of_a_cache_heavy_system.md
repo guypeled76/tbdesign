@@ -33,7 +33,7 @@ We need to introduce a pub/sub system in to the architecture to allow publishing
 
 The messages sent to the pub/sub system should be rather simple as ideally it would contain a key or list of keys that should be invalidated. The subscribers of the pub/sub system will be the different cache layer instances which will now get notified when they need to delete stale data.
 
-LRU and TTL eviction policies will still be used to manage the memory consumption but now we are not relaying on TTL to account for data updates. The time it will take to remove stale data will be dependent on the time it takes to receive a message from the backend data updates. While the consistency model will still be an eventually consistent model, the updating time will be more predictable.
+LRU eviction policy will still be used to manage the memory consumption but now we are not relaying on TTL to account for data updates. The time it will take to remove stale data will be dependent on the time it takes to receive a message from the backend data updates. While the consistency model will still be an eventually consistent model, the updating time will be more predictable.
 
 The pub/sub approach for invalidating the stale data will solve the redundant database queries we had in the previous architecture as we now have a way to actually know if data has changed and don't need to pull data again to see if there was a change.
 
