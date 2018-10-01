@@ -24,12 +24,15 @@ You're tasked with writing a spec for a generic local cache with the following p
 
 1. CacheStoreProvider - an interface or an abstract class that will be required to implement and provide and instance which will get and set values to the backend store.
 2. CacheConfig - a class with definitions for cache behavior such as the eviction policy.
+    * Eviction policy configuration.
+    * Default TTL configuration.
 3. Cache - a class that will be the entry point for caching interaction.
     * Cache class API:
         * ctor(cacheStoreProvider, cacheConfig)
             * cacheStoreProvider - an instance of a class implementing or extending CacheStoreProvider.
             * cacheConfig - an instance of class CacheConfig defining the behavior of the cache.
         * get(key) - a method that given a key returns the value based on cached value or if it is not available using the CacheStoreProvider. If value is not cached we should lock on the internal map in order to make sure that we only fetch the value from the store once.
+        * get(key, cacheStoreProvider) - We might want to define different cache store providers to different keys. So having an overload or this signature as the only option could be a useful approach.
     * Cache class implementation:
         * The cache class should hold a single member such as the LRUMap which will be a map that tracks it's entries by order, frequency, expiration and provided a call to a cleanup method will evict the relevant members. The member type will be based on the configuration provided in the construction of the Cache class.
         * On creation of the cache class a low priority thread will be invoked that will periodically call the cleanup method of the Map implementing member. This will evict members based on the configuration provided when the Cache class was created.
