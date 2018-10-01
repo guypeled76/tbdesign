@@ -38,7 +38,7 @@ You're tasked with writing a spec for a generic local cache with the following p
         * The class should have a close method that terminates the background thread.
     * _CacheMap_ class implementation:
         * The _CacheMap_ class should implement java.util.AbstractMap<K,V> and more specifically should implement a HashedMap in order to get O(1) time complexity for accessing entries.
-        * The _CacheMap_ class map entries should be linked list items so we can order the entries ordered by the eviction policy. This will enable quick updating of the order and also quick eviction implementation.
+        * The _CacheMap_ class map entries should be linked list items so we can order the entries ordered by the eviction policy. This will enable O(1) time complexity for updating of the order and also O(1) time complexity for eviction implementation.
         * A an example of such an class can be found in the implementation of the [LRUMap](https://commons.apache.org/proper/commons-collections/apidocs/org/apache/commons/collections4/map/LRUMap.html) which is implemented with a fixed maximum size that removes the least recently used entry if an entry is added when full.
             ```
             * java.lang.Object
