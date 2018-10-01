@@ -39,7 +39,7 @@ The pub/sub approach for invalidating the stale data will solve the redundant da
 
 The real complexity with the new architecture of using a pub/sub system as a way to invalidate stale data in the cache layer is identifying which cache keys should we update. Introducing casandra as the backend data store allows us to cache the entries based on the casandra model which could be described as a key value storage which the key is a combination of _table name_ and _primary key_ and the value is the actual record. 
 
-The previous paragraph is obviously a simplification of caching needs cause we might need to store a list of internal record list stored in casandra such as users friends list but we can still use the table name and primary key to generate a predictable key. That way if we update the friends list with in a user record we could publish a change message to the pub/sub system that states a a specific change with a key like this '[table]_[primarykey]_friends'. 
+The previous paragraph is obviously a simplification of caching needs cause we might need to store a list of internal record list stored in casandra such as user`s friends list but we can still use the table name and primary key to generate a predictable key. That way if we update the friends list with in a user record we could publish a change message to the pub/sub system that states a a specific change with a key like this '[table]_[primarykey]_friends'. 
 
 Another way that cassandra could help is caching at the database level using casandra's builtin row/key cache capabilities. This is obviously a less specific approach and might not really provide for all needs but in simple cases might do the job.
 
