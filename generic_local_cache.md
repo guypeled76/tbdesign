@@ -23,6 +23,7 @@ You're tasked with writing a spec for a generic local cache with the following p
 ## Implementation Overview (in-proc):
 
 1. CacheStoreProvider - an interface or an abstract class that will be required to implement and provide and instance which will get and set values to the backend store.
+    * readFromStore(key) - A single method that returns the value from the data store.
 2. CacheConfig - a class with definitions for cache behavior such as the eviction policy.
     * Eviction policy configuration.
     * Default TTL configuration.
