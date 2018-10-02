@@ -30,11 +30,11 @@ You're tasked with writing a spec for a generic local cache with the following p
         * ctor(cacheStoreProvider, cacheConfig)
             * cacheStoreProvider - an instance of a class implementing or extending _CacheStoreProvider_.
             * cacheConfig - an instance of class _CacheConfig_ defining the behavior of the cache.
-        * get(key) - a method that given a key returns the value based on cached value or if it is not available using the _CacheStoreProvider_. If value is not cached we should lock on the internal map in order to make sure that we only fetch the value from the store once.
-        * get(key, cacheStoreProvider) - We might want to define different cache store providers to different keys. So having an overload or this signature as the only option could be a useful approach.
+        * get(key) - a method that given a key returns the value based on cached value. If it is not available then it uses the _CacheStoreProvider_ to get it. If value is not cached we should lock on the internal map in order to make sure that we only fetch the value from the store once.
+        * get(key, cacheStoreProvider) - We might want to define different cache store providers to different keys. So having an overload like this or this signature as the only option, could be a useful approach.
     * _Cache_ class implementation:
-        * The _Cache_ class should hold a single member of type _CacheMap_ which will be a map that tracks it's entries by order, frequency, expiration and provided a call to a cleanup method will evict the relevant members. The member type will be based on the configuration provided in the construction of the _Cache_ class.
-        * On creation of the _Cache_ class a low priority thread will be invoked that will periodically call the _cleanup_ method of the Map implementing member. This will evict members based on the configuration provided when the _Cache_ class was created.
+        * The _Cache_ class should hold a single member of type _CacheMap_, which will be a map that tracks it's entries by order, frequency, expiration and provided a call to a cleanup method will evict the relevant members. The member type will be chosen based on the configuration provided in the construction of the _Cache_ class. Different implementations of the _CacheMap_ will provide different eviction policies.
+        * On creation of the _Cache_ class, a low priority thread will be invoked that will periodically call the _cleanup_ method of the _CacheMap_ member. This will evict members based on the configuration provided when the _Cache_ class was created.
         * The class should have a close method that terminates the background thread.
     * _CacheMap_ class implementation:
         * The _CacheMap_ class should implement java.util.AbstractMap<K,V> and more specifically should implement a HashedMap in order to get O(1) time complexity for accessing entries.
